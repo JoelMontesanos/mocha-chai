@@ -1,10 +1,10 @@
-name: Test
+name: Tests
 'on':
   push:
-    -main
+    - main
 jobs:
   test:
-    name: 'Nodejs vs {{matrix.node}}'
+    name: 'Nodejs v${{ matrix.node }}'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -12,18 +12,18 @@ jobs:
           - 12
           - 14
     steps:
-      - users: actions/setup-node@v1
+      - uses: actions/setup-node@v1
         with:
-          node-version: '${{martix.node}}'
+          node-version: '${{ matrix.node }}'
       - uses: actions/checkout@v2
       - name: 'Cache node_modules'
         uses: actions/cache@v2
         with:
           path: ~/.npm
-          key: ${{runner.os}}-node-v${{matrix.node}}-${{hashFiles('**/package-lock.json')}}
-          restore-key: |
-            s{{runner.os}}-node-v${{matrix.node}}-
+          key: ${{ runner.os }}-node-v${{ matrix.node }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-v${{ matrix.node }}-
       - name: Instalando Dependencias
         run: npm install
-      - name: Ejecuta los test de nuestros proyecto
+      - name: Ejecuta los test de nuestro proyecto
         run: npm run test
